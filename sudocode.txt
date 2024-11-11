@@ -1,0 +1,32 @@
+int *matrix;
+int value;
+
+rank, num_procs
+
+rows_per_proc = N / num_procs
+
+local_matrix[N * rows_per_proc]
+
+if(rank == 0){
+        matrix = (*int)malloc(N * N * sizeof(int))
+    }
+
+MPI_Scatter(
+    matrix, rows_per_proc * N, MPI_INT, 
+    local_matrix, rows_per_proc * N, MPI_INT,
+    0, MPI_COMM_WORLD
+)
+
+for(int i = 0; i < rows_per_proc; ++i){
+    for(int j = 0; j < N; ++j){
+        local_matrix[i * N + j] += value;
+    }
+}
+
+
+MPI_Gather(
+    local_matrix, rows_per_proc * N, MPI_INT,
+    matrix, rows_per_proc * N, MPI_INT, 
+    0, MPI_COMM_WORLD
+)
+
